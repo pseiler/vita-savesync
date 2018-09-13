@@ -9,6 +9,11 @@ typedef struct configure {
     const char *slot_format;
     char *list_mode;
     uint8_t use_dpad;
+    const char *domain;
+    const char *url_path;
+    const char *user;
+    const char *password;
+    const char *sync_dir;
 } configure;
 
 extern configure config;

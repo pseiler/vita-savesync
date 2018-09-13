@@ -39,6 +39,16 @@ static int handler(void* out,
         p->list_mode = strdup(value);
     } else if (strcmp(name, "use_dpad") == 0) {
         p->use_dpad = strncmp(value, "true", 4) == 0;
+    } else if (strcmp(name, "domain") == 0) {
+        p->domain = strdup(value);
+    } else if (strcmp(name, "url_path") == 0) {
+        p->url_path = strdup(value);
+    } else if (strcmp(name, "user") == 0) {
+        p->user = strdup(value);
+    } else if (strcmp(name, "password") == 0) {
+        p->password = strdup(value);
+    } else if (strcmp(name, "sync_dir") == 0) {
+        p->sync_dir = strdup(value);
     }
     return 1;
 }
@@ -58,6 +68,12 @@ void load_config() {
     if (!config.list_mode) {
         config.list_mode = strdup(DEFAULT_LIST_MODE);
     }
+    if (!config.url_path) {
+        config.url_path = strdup(DEFAULT_URL_PATH);
+    }
+    if (!config.sync_dir) {
+        config.sync_dir = strdup(DEFAULT_SYNC_DIR);
+    }
 }
 
 void save_config() {
@@ -66,5 +82,10 @@ void save_config() {
     fprintf(f, "%s = %s\n", "slot_format", config.slot_format);
     fprintf(f, "%s = %s\n", "list_mode", config.list_mode);
     fprintf(f, "%s = %s\n", "use_dpad", config.use_dpad ? "true": "false");
+    fprintf(f, "%s = %s\n", "domain", config.domain);
+    fprintf(f, "%s = %s\n", "url_path", config.url_path);
+    fprintf(f, "%s = %s\n", "user", config.user);
+    fprintf(f, "%s = %s\n", "password", config.password);
+    fprintf(f, "%s = %s\n", "sync_dir", config.sync_dir);
     fclose(f);
 }

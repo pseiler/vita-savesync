@@ -123,6 +123,8 @@
 #define DEFAULT_BASE_SAVEDIR          "/data/savegames"
 #define DEFAULT_SAVE_SLOT_FORMAT      "%s/SLOT%d"
 #define DEFAULT_LIST_MODE             "icon"
+#define DEFAULT_SYNC_DIR             "savemgr"
+#define DEFAULT_URL_PATH             ""
 
 #define SCE_CTRL_HOLD 0x80000000
 

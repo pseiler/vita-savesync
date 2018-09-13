@@ -15,6 +15,7 @@
 #include <psp2/kernel/modulemgr.h>
 #include <vita2d.h>
 #include <taihen.h>
+#include <curl/curl.h>
 
 #include "common.h"
 #include "config.h"
@@ -85,6 +86,15 @@ int select_col = 0;
 int select_appinfo_button = 0;
 int select_slot = 0;
 int select_config = 2;
+
+char *userpwd(char *user, char *password) {
+    char * result = malloc(strlen(user) + 1 + strlen(password) + 1);
+    strcpy(result, user);
+    strcat(result, ":");
+    strcat(result, password);
+    sprintf(result, "%s:%s", user, password);
+    return result;
+}
 
 char *save_dir_path(const appinfo *info) {
     //if (strncmp(info->dev, "gro0", 4) == 0) {
@@ -1036,6 +1046,29 @@ exit:
     }
     return res;
 }
+
+ int upload_savedata(appinfo *info) {
+     int res = NO_ERROR;
+     char *target = save_dir_path(info);
+     if (!target) {
+         res = ERROR_MEMORY_ALLOC;
+         goto exit;
+     }
+     if (!exists(target)) {
+         res = ERROR_NO_SAVE_DIR;
+         goto exit;
+     }
+     lock_psbutton();
+     init_progress(file_count(target, 0));
+     // TODO: here comes the webdav part
+     //    rmdir(target, incr_progress);
+ exit:
+     unlock_psbutton();
+     if (target) {
+         free(target);
+     }
+     return res;
+ }
 
 void draw_screen(ScreenState state, appinfo *curr, appinfo *choose, int slot) {
     for (int i = 0; i < 3; i++) {

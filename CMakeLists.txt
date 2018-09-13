@@ -1,5 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 
+#if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+#  if(DEFINED ENV{VITASDK})
+#    set(CMAKE_TOOLCHAIN_FILE "$ENV{VITASDK}/share/vita.toolchain.cmake" CACHE PATH "toolchain file")
+#  else()
+#    message(FATAL_ERROR "Please define VITASDK to point to your SDK path!")
+#  endif()
+#endif()
+
 set(CMAKE_SYSTEM_NAME "Generic")
 set(CMAKE_C_COMPILER "arm-vita-eabi-gcc")
 
@@ -33,6 +41,9 @@ add_definitions(-DVERSION=\"${VERSION}\")
 
 set(CMAKE_C_FLAGS "-Wl,-q -Wall -O3 -std=c99")
 
+#find_package(CURL REQUIRED)
+#find_package(OpenSSL REQUIRED)
+
 include_directories(
     sqlite3
     extern/inih
@@ -48,6 +59,7 @@ add_executable(${PROJECT_NAME}.elf
     src/util.c
     src/main.c
     src/system.c
+    src/webdav.c
     src/vita_sqlite.c
 
     sqlite3/sqlite3.c
@@ -79,6 +91,13 @@ target_link_libraries(${PROJECT_NAME}.elf
     -ldebugnet
     -lSceNetCtl_stub
     -lSceNet_stub
+
+    -lSceNetCtl_stub
+    -lSceSsl_stub
+    -lSceHttp_stub
+    -lcurl
+    -lssl
+    -lcrypto
 )
 
 add_custom_target(${PROJECT_NAME}.vpk ALL
